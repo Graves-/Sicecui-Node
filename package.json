@@ -1,0 +1,36 @@
+{
+  "name": "sicecui-node",
+  "version": "0.0.1",
+  "description": "Projecto SICECUI elaborado con Node en back-end.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Graves-/Sicecui-Node.git"
+  },
+  "keywords": [
+    "nodejs",
+    "node",
+    "mysql",
+    "express",
+    "handlebars",
+    "angularjs",
+    "angular",
+    "google",
+    "sicecui",
+    "school"
+  ],
+  "author": "Guillermo Ortiz Rebolledo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Graves-/Sicecui-Node/issues"
+  },
+  "homepage": "https://github.com/Graves-/Sicecui-Node#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "mysql": "^2.11.1"
+  }
+}
