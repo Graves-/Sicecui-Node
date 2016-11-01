@@ -1,0 +1,39 @@
+<div class="container-fluid" ng-controller="controller-maestros" style="padding-top:80px;">
+	<div class="table-responsive">
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Origen</th>
+					<th>Teléfono</th>
+					<th>Email</th>
+					<th>RFC</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="maestro in maestros">
+					<td>{[{maestro.Nombre+" "+maestro.ApellidoPeterno+" "+maestro.ApellidoMaterno}]}</td>
+					<td>{[{maestro.municipio+","+maestro.Entidad}]}</td>
+					<td>{[{maestro.Telefono}]}</td>
+					<td>{[{maestro.Email}]}</td>
+					<td>{[{maestro.RFC}]}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+		app.config(function($interpolateProvider) {
+		  $interpolateProvider.startSymbol('{[{');
+		  $interpolateProvider.endSymbol('}]}');
+		});
+
+	app.controller('controller-maestros',function($scope,$http) {
+		$http.get("/getMaestros")
+	    .then(function(response) {
+	        $scope.maestros = response.data;
+	    });
+	});
+</script>

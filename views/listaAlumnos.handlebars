@@ -1,5 +1,26 @@
-<div class="container-fluid" ng-controller="controller-alumnos">
-	{[{"hola mundo."}]}
+<div class="container-fluid" ng-controller="controller-alumnos" style="padding-top:80px;">
+	<div class="table-responsive">
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Origen</th>
+					<th>Email</th>
+					<th>Carrera</th>
+					<th>Cuatrimestre</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="alumno in alumnos">
+					<td>{[{alumno.Nombre + " " + alumno.ApellidoPeterno + " " + alumno.ApellidoMaterno}]}</td>
+					<td>{[{alumno.municipio +","+alumno.Entidad}]}</td>
+					<td>{[{alumno.Email}]}</td>
+					<td>{[{alumno.NombreCarrera}]}</td>
+					<td>{[{alumno.CuatrimestreID}]}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -10,6 +31,9 @@
 		});
 
 	app.controller('controller-alumnos',function($scope,$http) {
-
+		$http.get("/getAlumnos")
+	    .then(function(response) {
+	        $scope.alumnos = response.data;
+	    });
 	});
 </script>

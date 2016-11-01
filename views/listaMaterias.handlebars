@@ -1,0 +1,47 @@
+<div class="container-fluid" ng-controller="controller-materias" style="padding-top:80px;">
+	<div class="table-responsive">
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Clave de Materia</th>
+					<th>Nombre</th>
+					<th>Seriación</th>
+					<th>Horas Docente</th>
+					<th>Horas Independientes</th>
+					<th>Créditos</th>
+					<th>Instalaciones</th>
+					<th>Cuatrimestre</th>
+					<th>Carrera</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="materia in materias">
+					<td>{[{materia.MateriaID}]}</td>
+					<td>{[{materia.Nombre}]}</td>
+					<td>{[{materia.Seriacion}]}</td>
+					<td>{[{materia.HorasDoc + " hrs."}]}</td>
+					<td>{[{materia.HorasInd + " hrs."}]}</td>
+					<td>{[{materia.Creditos}]}</td>
+					<td>{[{materia.Instalaciones}]}</td>
+					<td>{[{materia.CuatrimestreID}]}</td>
+					<td>{[{materia.CarreraID}]}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+		app.config(function($interpolateProvider) {
+		  $interpolateProvider.startSymbol('{[{');
+		  $interpolateProvider.endSymbol('}]}');
+		});
+
+	app.controller('controller-materias',function($scope,$http) {
+		$http.get("/getMaterias")
+	    .then(function(response) {
+	        $scope.materias = response.data;
+	    });
+	});
+</script>

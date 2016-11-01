@@ -53,6 +53,10 @@ app.get('/listaMaestros', function (req, res) {
     res.render('listaMaestros');
 });
 
+app.get('/listaMaterias', function(req,res) {
+	res.render('listaMaterias');
+});
+
 //POST HEADERS - application/x-www-form-urlencoded
 //GET POST DATA WITH ExpressJS - req.body.variable_name
 
@@ -99,7 +103,7 @@ app.post('/insertAlumno',function(req,res){
 		Email : req.body.Email,
 		PerfilID : 1,
 		CuatrimestreID : req.body.CuatrimestreID,
-		CarreraID: req.body.Carrera,
+		CarreraID: req.body.CarreraID,
 		Trabaja: req.body.Trabaja
 	};
 	var query = connection.query('INSERT INTO Persona SET ?', persona, function(err, result) {
@@ -130,6 +134,30 @@ app.get('/insertCarrera',function(req,res){
 app.get('/getCarreras', function (req, res) {
 	//PARA LLEVAR A CABO UN SELECT EN LA BD
 	connection.query('SELECT * FROM Carrera', function(err, rows, fields) {
+	  if (err) throw err;
+	  res.send(JSON.stringify(rows));
+	});
+});
+
+app.get('/getAlumnos', function (req, res) {
+	//PARA LLEVAR A CABO UN SELECT EN LA BD
+	connection.query('select p.Nombre,ApellidoPeterno,ApellidoMaterno,Telefono,municipio,Entidad,Direccion,CURP,Trabaja,Email,c.CarreraID,c.Nombre as NombreCarrera, CuatrimestreID from persona p left join carrera c on c.CarreraID=p.CarreraID where PerfilID = 1', function(err, rows, fields) {
+	  if (err) throw err;
+	  res.send(JSON.stringify(rows));
+	});
+});
+
+app.get('/getMaestros', function (req, res) {
+	//PARA LLEVAR A CABO UN SELECT EN LA BD
+	connection.query('SELECT * FROM Persona WHERE PerfilID = 2', function(err, rows, fields) {
+	  if (err) throw err;
+	  res.send(JSON.stringify(rows));
+	});
+});
+
+app.get('/getMaterias', function (req, res) {
+	//PARA LLEVAR A CABO UN SELECT EN LA BD
+	connection.query('SELECT * FROM Materias', function(err, rows, fields) {
 	  if (err) throw err;
 	  res.send(JSON.stringify(rows));
 	});
