@@ -1,0 +1,15 @@
+<div class="container-fluid" ng-controller="controller-alumnos">
+	{[{"hola mundo."}]}
+</div>
+
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+		app.config(function($interpolateProvider) {
+		  $interpolateProvider.startSymbol('{[{');
+		  $interpolateProvider.endSymbol('}]}');
+		});
+
+	app.controller('controller-alumnos',function($scope,$http) {
+
+	});
+</script>

@@ -50,8 +50,12 @@ create table Persona(
 	PerfilID integer,
 	NombreBeneficiario varchar(255),
 	DireccionBeneficiario varchar(255),
+	CuatrimestreID integer,
+	CarreraID varchar(255),
 	PRIMARY KEY (PersonaID),
-	FOREIGN KEY (PerfilID) REFERENCES Perfil(PerfilID)
+	FOREIGN KEY (PerfilID) REFERENCES Perfil(PerfilID),
+	FOREIGN KEY (CuatrimestreID) REFERENCES Cuatrimestre(CuatrimestreID),
+	FOREIGN KEY (CarreraID) REFERENCES Carrera(CarreraID)
 );
 
 create table Imparte(

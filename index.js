@@ -1,6 +1,7 @@
 //MODULES
 var express = require('express');
 var exphbs  = require('express-handlebars');
+var bodyParser = require('body-parser');
 
 //EXPRESS
 var app = express();
@@ -14,6 +15,12 @@ app.set('view engine', 'handlebars');
 app.use(express.static('public'));
 
 app.use("/",router);
+
+//USE Body Parser
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
 
 //CONEXION A LA BD
 var mysql      = require('mysql');
@@ -34,26 +41,37 @@ app.get('/inscripcionAlumno', function (req, res) {
     res.render('alumnos');
 });
 
-app.get('/inscripcionMaestro', function (req, res) {
+app.get('/inscripcionMaestros', function (req, res) {
     res.render('maestros');
 });
 
-app.get('/insertMaestro',function(req,res){
+app.get('/listaAlumnos', function (req, res) {
+    res.render('listaAlumnos');
+});
+
+app.get('/listaMaestros', function (req, res) {
+    res.render('listaMaestros');
+});
+
+//POST HEADERS - application/x-www-form-urlencoded
+//GET POST DATA WITH ExpressJS - req.body.variable_name
+
+app.post('/insertMaestro',function(req,res){
 	//PARA INSERTAR DATOS EN LA BD MEDIANTE UN OBJETO
 	var persona  = {
-		Nombre: 'Maestro 1',
-		ApellidoPeterno : 'A',
-		ApellidoMaterno : 'B',
-		Telefono : '1234567890',
-		municipio : 'Celaya',
-		Entidad : 'Guanajuato',
-		Direccion :  'Saturno 111, Santa Anita',
-		RFC : '7854587845784',
-		CURP : '147852369874563210',
-		Email : 'correo1@gmail.com',
+		Nombre: req.body.Nombre,
+		ApellidoPeterno : req.body.ApellidoPeterno,
+		ApellidoMaterno : req.body.ApellidoMaterno,
+		Telefono : req.body.Telefono,
+		municipio : req.body.municipio,
+		Entidad : req.body.Entidad,
+		Direccion :  req.body.Direccion,
+		RFC : req.body.RFC,
+		CURP : req.body.CURP,
+		Email : req.body.Email,
 		PerfilID : 2,
-		NombreBeneficiario : 'Ben 1',
-		DireccionBeneficiario : 'Dir Ben 1'
+		NombreBeneficiario : req.body.NombreBeneficiario,
+		DireccionBeneficiario : req.body.DireccionBeneficiario
 	};
 	var query = connection.query('INSERT INTO Persona SET ?', persona, function(err, result) {
 		if (err){
@@ -61,6 +79,36 @@ app.get('/insertMaestro',function(req,res){
 			res.render('500');
 		}else{
 			console.log(result);
+			res.redirect('/inscripcionMaestro');
+		}
+	});
+	console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL' 
+});
+
+app.post('/insertAlumno',function(req,res){
+	//PARA INSERTAR DATOS EN LA BD MEDIANTE UN OBJETO
+	var persona  = {
+		Nombre: req.body.Nombre,
+		ApellidoPeterno : req.body.ApellidoPeterno,
+		ApellidoMaterno : req.body.ApellidoMaterno,
+		Telefono : req.body.Telefono,
+		municipio : req.body.municipio,
+		Entidad : req.body.Entidad,
+		Direccion :  req.body.Direccion,
+		CURP : req.body.CURP,
+		Email : req.body.Email,
+		PerfilID : 1,
+		CuatrimestreID : req.body.CuatrimestreID,
+		CarreraID: req.body.Carrera,
+		Trabaja: req.body.Trabaja
+	};
+	var query = connection.query('INSERT INTO Persona SET ?', persona, function(err, result) {
+		if (err){
+			console.log(err);
+			res.render('500');
+		}else{
+			console.log(result);
+			res.redirect('/inscripcionAlumno');
 		}
 	});
 	console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL' 
