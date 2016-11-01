@@ -57,6 +57,9 @@ app.get('/listaMaterias', function(req,res) {
 	res.render('listaMaterias');
 });
 
+app.get('/asignarMaterias', function(req,res) {
+	res.render('asignarMaterias');
+});
 //POST HEADERS - application/x-www-form-urlencoded
 //GET POST DATA WITH ExpressJS - req.body.variable_name
 
@@ -141,7 +144,7 @@ app.get('/getCarreras', function (req, res) {
 
 app.get('/getAlumnos', function (req, res) {
 	//PARA LLEVAR A CABO UN SELECT EN LA BD
-	connection.query('select p.Nombre,ApellidoPeterno,ApellidoMaterno,Telefono,municipio,Entidad,Direccion,CURP,Trabaja,Email,c.CarreraID,c.Nombre as NombreCarrera, CuatrimestreID from persona p left join carrera c on c.CarreraID=p.CarreraID where PerfilID = 1', function(err, rows, fields) {
+	connection.query('select p.PersonaID,p.Nombre,ApellidoPeterno,ApellidoMaterno,Telefono,municipio,Entidad,Direccion,CURP,Trabaja,Email,c.CarreraID,c.Nombre as NombreCarrera, CuatrimestreID from persona p left join carrera c on c.CarreraID=p.CarreraID where PerfilID = 1', function(err, rows, fields) {
 	  if (err) throw err;
 	  res.send(JSON.stringify(rows));
 	});

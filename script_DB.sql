@@ -65,3 +65,16 @@ create table Imparte(
 	FOREIGN KEY (MateriaID) REFERENCES Materias(MateriaID),
 	FOREIGN KEY (PersonaID) REFERENCES Persona(PersonaID)
 );
+
+create table Cursando(
+	CursoID integer NOT NULL AUTO_INCREMENT,
+	PrimerParcial decimal,
+	SegundoParcial decimal,
+	TercerParcial decimal,
+	Promedio decimal,
+	MateriaID varchar(255),
+	AlumnoID integer,
+	PRIMARY KEY (CursoID),
+	FOREIGN KEY (MateriaID) REFERENCES Materias(MateriaID),
+	FOREIGN KEY (AlumnoID) REFERENCES Persona(PersonaID)
+);
