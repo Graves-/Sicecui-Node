@@ -16,17 +16,41 @@
 		</div>
 	</div>
 
+	<div class="row" style="margin-top: 20px;">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="persona != null">
+			<ul class="list-group">
+				<li class="list-group-item"><strong>Nombre:&nbsp;</strong>{[{persona.Nombre + " " + persona.ApellidoPeterno + " " + persona.ApellidoMaterno }]}</li>
+				<li class="list-group-item"><strong>Cuatrimestre:&nbsp;</strong>{[{persona.CuatrimestreID}]}</li>
+				<li class="list-group-item"><strong>Email:&nbsp;</strong>{[{persona.Email}]}</li>
+			</ul>
+		</div>
+	</div>
+
 	<div class="row">
-		
+		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" ng-repeat="materia in materias">
+			<div class="alert alert-dismissible alert-success">
+			  <strong>{[{materia.MateriaID}]}</strong>
+			  <p>{[{materia.Nombre}]}</p>
+			  <p><strong>Créditos:&nbsp;</strong>{[{materia.Creditos}]}</p>
+			  <p ng-if='materia.Seriacion != ""'><strong>Seriación:&nbsp;</strong>{[{materia.Seriacion}]}</p>
+			  <p><strong>Instalaciones:&nbsp;{[{materia.Instalaciones}]}</strong></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" ng-if="materias != null">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<a class="btn btn-primary pull-right" ng-click="InscribirMaterias()">Inscribir</a>
+		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
 	var app = angular.module('sicecui', []);
-		app.config(function($interpolateProvider) {
-		  $interpolateProvider.startSymbol('{[{');
-		  $interpolateProvider.endSymbol('}]}');
-		});
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
 
 	app.controller('controller-asignar',function($scope,$http) {
 
@@ -35,7 +59,28 @@
 	    });
 
 		$scope.AlumnoSelected = function(){
-			alert("Persona ID: " + $scope.OptionSelected);
+			$http.get("/getPersonaAlumno?id="+$scope.OptionSelected).then(function(response) {
+		        $scope.persona = response.data[0];
+		        var CuatrimestreID = response.data[0].CuatrimestreID;
+		        var CarreraID = response.data[0].CarreraID;
+		        $http.get("/getMateriasAlumno?cuat="+CuatrimestreID+"&carrera="+CarreraID).then(function(response) {
+			        $scope.materias = response.data;
+			    });
+		    });
+		};
+
+		$scope.InscribirMaterias = function(){
+			for (var i = 0; i < $scope.materias.length; i++) {
+				//alert("insertar: " + $scope.persona.PersonaID + " en " + $scope.materias[i].MateriaID);
+				$http.get("/insertCursando?MateriaID="+$scope.materias[i].MateriaID+"&PersonaID="+$scope.persona.PersonaID).then(
+					function success(response) {
+			    		if (response == "ok") { alert("Insertado con 'exito.");}
+			    	}, 
+			    	function error(response) {
+			    		alert("Error al inscribir materia! " + response.statusText);
+			   		}
+		   		);
+			}
 		};
 	    
 	});

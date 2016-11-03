@@ -72,9 +72,9 @@ create table Cursando(
 	SegundoParcial decimal,
 	TercerParcial decimal,
 	Promedio decimal,
-	MateriaID varchar(255),
-	AlumnoID integer,
-	PRIMARY KEY (CursoID),
+	MateriaID varchar(255) NOT NULL,
+	AlumnoID integer NOT NULL,
+	PRIMARY KEY (CursoID,MateriaID,AlumnoID),
 	FOREIGN KEY (MateriaID) REFERENCES Materias(MateriaID),
 	FOREIGN KEY (AlumnoID) REFERENCES Persona(PersonaID)
 );

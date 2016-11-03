@@ -1,0 +1,64 @@
+<div class="container" style="margin-top: 80px;" ng-controller="controller-kardex">
+	<div class="page-header">
+	  <h1>Kardex<small>&nbsp;Alumno</small></h1>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<label>Filtro: </label>
+			<input type="text" name="" id="input" class="form-control" placeholder="Carrera" ng-model="FiltroCarrera" >
+		</div>
+		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+			<label>Elegir alumno: </label>
+			<select class="form-control" ng-change="AlumnoSelected()" ng-model="OptionSelected">
+				<option ng-repeat="alumno in alumnos | filter: FiltroCarrera" value="{[{alumno.PersonaID}]}">{[{alumno.Nombre + " " + alumno.ApellidoPeterno + " " + alumno.ApellidoMaterno + "  |  " + alumno.NombreCarrera}]}</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row">
+		<ul class="list-group" ng-repeat="materia in cursando" style="padding-top: 20px;">
+			<li class="list-group-item active" style="text-align: center;"><span class="pull-left">{[{materia.Nombre}]}</span><span class="pull-right">Cuatrimestre:&nbsp;{[{materia.CuatrimestreID}]}</span><br></li>
+			<li class="list-group-item">Clave:&nbsp;{[{materia.MateriaID}]}</li>
+			<li class="list-group-item">Primer Parcial:&nbsp;{[{materia.PrimerParcial}]}</li>
+			<li class="list-group-item">Segundo Parcial:&nbsp;{[{materia.SegundoParcial}]}</li>
+			<li class="list-group-item">Tercer Parcial:&nbsp;{[{materia.TercerParcial}]}</li>
+			<li class="list-group-item" style="background-color: #FF9201;">Cuarto Parcial:&nbsp;{[{materia.Promedio}]}</li>
+		</ul>
+	</div>
+
+	<div class="row">
+		
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
+
+	app.controller('controller-kardex',function($scope,$http) {
+
+		$http.get("/getAlumnos").then(function(response) {
+	        $scope.alumnos = response.data;
+	    });
+
+	    $scope.AlumnoSelected = function(){
+			$http.get("/getPersonaAlumno?id="+$scope.OptionSelected).then(function(response) {
+		        $scope.persona = response.data[0];
+		        var CuatrimestreID = response.data[0].CuatrimestreID;
+		        var CarreraID = response.data[0].CarreraID;
+		        $http.get("/getMateriasAlumno?cuat="+CuatrimestreID+"&carrera="+CarreraID).then(function(response) {
+			        $scope.materias = response.data;
+			    });
+		    });
+		};
+		
+	    $http.get("/getCursando?AlumnoID=1").then(function(response) {
+	        $scope.cursando = response.data;
+	    });
+	});
+</script>
