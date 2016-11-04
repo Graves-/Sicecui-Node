@@ -81,6 +81,10 @@ app.get('/modificaMateria', function(req,res) {
 	res.render('modificaMateria');
 });
 
+app.get('/modificaCarrera', function(req,res) {
+	res.render('modificaCarrera');
+});
+
 //POST HEADERS - application/x-www-form-urlencoded
 //GET POST DATA WITH ExpressJS - req.body.variable_name
 
@@ -190,6 +194,22 @@ app.post('/updateMateria', function(req,res) {
 	});
 });
 
+//UPDATE DE CARRERA (tabla Carrera) DE ACUARDO A LOS DATOS LLENADOS EN EL FORMULARIO
+app.post('/updateCarrera', function(req,res) {
+	var sql = "Update Carrera SET Nombre='"+req.body.Nombre+"' WHERE CarreraID='"+req.body.CarreraID+"'";
+	console.log(sql);
+
+	connection.query(sql, function (err, result) {
+	  if (err){
+			console.log(err);
+			res.render('500');
+		}else{
+			console.log(result);
+			res.redirect('/modificaCarrera');
+		}
+	});
+});
+
 //INSERTA UNA CARRERA EN LA BD
 app.get('/insertCarrera',function(req,res){
 	//PARA INSERTAR DATOS EN LA BD MEDIANTE UN OBJETO
@@ -223,7 +243,11 @@ app.get('/insertCursando', function(req,res) {
 //OBTIENE LA INFORMACION DE LAS CARRERAS QUE EXISTEN EN LA BD
 app.get('/getCarreras', function (req, res) {
 	//PARA LLEVAR A CABO UN SELECT EN LA BD
-	connection.query('SELECT * FROM Carrera', function(err, rows, fields) {
+	var sql = "SELECT * FROM Carrera";
+	if (req.query.id != null) {
+		sql = sql + " WHERE CarreraID = '" + req.query.id + "'";
+	}
+	connection.query(sql, function(err, rows, fields) {
 	  if (err) throw err;
 	  res.send(JSON.stringify(rows));
 	});

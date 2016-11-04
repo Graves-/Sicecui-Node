@@ -1,0 +1,59 @@
+<div class="container" style="margin-top: 80px;" ng-controller="controller-modificaCarrera">
+	<div class="page-header">
+	  <h1>Modificación&nbsp;<small>Carreras</small></h1>
+	</div>
+
+	<!-- SECCION PARA FILTRO DE Materias -->
+	<div class="row">
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<label>Filtro: </label>
+			<input type="text" name="" id="" class="form-control" placeholder="Carrera" ng-model="FiltroCarrera" >
+		</div>
+		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+			<label>Elegir carrera: </label>
+			<select class="form-control" ng-change="CarreraSelected()" ng-model="OptionSelected">
+				<option ng-repeat="carrera in carreras | filter: FiltroCarrera" value="{[{carrera.CarreraID}]}">{[{carrera.Nombre}]}</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row" ng-if="datosCarrera != null">
+		<form action="/updateCarrera" method="POST" role="form">
+			<div class="form-group">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<label for="">Clave</label>
+					<input type="text" class="form-control" id="CarreraID" name="CarreraID" readonly="readonly" value="{[{datosCarrera.CarreraID}]}">
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<label for="">Nombre</label>
+					<input type="text" class="form-control" id="Nombre" name="Nombre" value="{[{datosCarrera.Nombre}]}">
+					<button type="submit" class="btn btn-primary pull-right" style="margin-top: 10px;">Modificar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- SCRIPT PARA ANGULAR-->
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
+
+	app.controller('controller-modificaCarrera',function($scope,$http) {
+		
+		$http.get("/getCarreras").then(function(response) {
+	        $scope.carreras = response.data;
+	    });
+
+	    $scope.CarreraSelected = function(){
+			$http.get("/getCarreras?id="+$scope.OptionSelected).then(function(response) {
+				$scope.datosCarrera = response.data[0];
+				console.log(response.data[0]);
+				
+		    });
+		};
+	});
+</script>
