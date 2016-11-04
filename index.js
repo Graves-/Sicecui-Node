@@ -77,6 +77,10 @@ app.get('/modificaMaestro', function(req, res) {
 	res.render('modificaMaestro');
 });
 
+app.get('/modificaMateria', function(req,res) {
+	res.render('modificaMateria');
+});
+
 //POST HEADERS - application/x-www-form-urlencoded
 //GET POST DATA WITH ExpressJS - req.body.variable_name
 
@@ -157,7 +161,7 @@ app.post('/updateAlumno', function(req,res) {
 
 //UPDATE DE MAESTRO (tabla Persona) DE ACUARDO A LOS DATOS LLENADOS EN EL FORMULARIO
 app.post('/updateMaestro', function(req,res) {
-	var sql = "UPDATE Persona SET Nombre='"+req.body.Nombre+"', ApellidoPeterno='"+req.body.ApellidoPeterno+"',ApellidoMaterno='"+req.body.ApellidoMaterno+"',Telefono='"+req.body.Telefono+"',municipio='"+req.body.municipio+"',Entidad='"+req.body.Entidad+"',Direccion='"+req.body.Direccion+"',CURP='"+req.body.CURP+"',Email='"+req.body.Email+"',CuatrimestreID="+req.body.CuatrimestreID+",CarreraID='"+req.body.CarreraID+"',Trabaja='"+req.body.Trabaja+"' WHERE PersonaID = " + req.body.PersonaID + " AND PerfilID = 1"
+	var sql = "UPDATE Persona SET Nombre='"+req.body.Nombre+"', ApellidoPeterno='"+req.body.ApellidoPeterno+"',ApellidoMaterno='"+req.body.ApellidoMaterno+"',Telefono='"+req.body.Telefono+"',municipio='"+req.body.municipio+"',Entidad='"+req.body.Entidad+"',Direccion='"+req.body.Direccion+"',CURP='"+req.body.CURP+"',Email='"+req.body.Email+"',RFC='"+req.body.RFC+"', NombreBeneficiario = '"+req.body.NombreBeneficiario+"', DireccionBeneficiario = '"+req.body.DireccionBeneficiario+"' WHERE PersonaID = " + req.body.PersonaID + " AND PerfilID = 2"
 	console.log(sql);
 	connection.query(sql, function (err, result) {
 	  if (err){
@@ -166,6 +170,22 @@ app.post('/updateMaestro', function(req,res) {
 		}else{
 			console.log(result);
 			res.redirect('/modificaAlumno');
+		}
+	});
+});
+
+//UPDATE DE MATERIA (tabla Materias) DE ACUARDO A LOS DATOS LLENADOS EN EL FORMULARIO
+app.post('/updateMateria', function(req,res) {
+	var sql = "Update Materias SET Nombre='"+req.body.Nombre+"',Seriacion='"+req.body.Seriacion+"',HorasDoc="+req.body.HorasDoc+",HorasInd="+req.body.HorasInd+",Creditos="+req.body.Creditos+",Instalaciones='"+req.body.Instalaciones+"' WHERE MateriaID='"+req.body.MateriaID+"'";
+	console.log(sql);
+
+	connection.query(sql, function (err, result) {
+	  if (err){
+			console.log(err);
+			res.render('500');
+		}else{
+			console.log(result);
+			res.redirect('/modificaMateria');
 		}
 	});
 });
@@ -252,7 +272,12 @@ app.get('/getMaestros', function (req, res) {
 //OBTIENE LOS DETALLES DE MATERIAS EN LA BD
 app.get('/getMaterias', function (req, res) {
 	//PARA LLEVAR A CABO UN SELECT EN LA BD
-	connection.query('SELECT * FROM Materias', function(err, rows, fields) {
+	var sql = 'SELECT * FROM Materias';
+	if (req.query.id != null) {
+		sql = sql + " WHERE MateriaID = '" + req.query.id + "'";
+	}
+	console.log(sql);
+	connection.query(sql, function(err, rows, fields) {
 	  if (err) throw err;
 	  res.send(JSON.stringify(rows));
 	});

@@ -1,0 +1,79 @@
+<div class="container" style="padding-top: 80px;" ng-controller="controller-modificaMateria">
+	<div class="page-header">
+	  <h1>Modificación&nbsp;<small>Materias</small></h1>
+	</div>
+
+	<!-- SECCION PARA FILTRO DE Materias -->
+	<div class="row">
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<label>Filtro: </label>
+			<input type="text" name="" id="" class="form-control" placeholder="Carrera" ng-model="FiltroMateria" >
+		</div>
+		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+			<label>Elegir materia: </label>
+			<select class="form-control" ng-change="MateriaSelected()" ng-model="OptionSelected">
+				<option ng-repeat="materia in materias | filter: FiltroMateria" value="{[{materia.MateriaID}]}">{[{materia.CarreraID + " | " + materia.Nombre}]}</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row">
+		<form action="/updateMateria" method="POST" role="form">
+			<div class="form-group">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<label for="MateriaID">Clave</label>
+					<input type="text" class="form-control" id="MateriaID" name="MateriaID" readonly="readonly" value="{[{datosMateria.MateriaID}]}">
+
+					<label for="Nombre">Nombre</label>
+					<input type="text" class="form-control" id="Nombre" name="Nombre" value="{[{datosMateria.Nombre}]}">
+
+					<label for="Seriacion">Seriación</label>
+					<input type="text" class="form-control" id="Seriacion" name="Seriacion" value="{[{datosMateria.Seriacion}]}">
+
+					<label for="Nombre">Créditos</label>
+					<input type="text" class="form-control" id="Creditos" name="Creditos" value="{[{datosMateria.Creditos}]}">
+					
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+					<label for="Nombre">Instalaciones</label>
+					<input type="text" class="form-control" id="Instalaciones" name="Instalaciones" value="{[{datosMateria.Instalaciones}]}">
+
+					<label for="Nombre">Horas Docente</label>
+					<input type="text" class="form-control" id="HorasDoc" name="HorasDoc" value="{[{datosMateria.HorasDoc}]}">
+
+					<label for="Nombre">Horas Indepentientes</label>
+					<input type="text" class="form-control" id="HorasInd" name="HorasInd" value="{[{datosMateria.HorasInd}]}">
+
+					<label for="Nombre">Cuatrimestre</label>
+					<input type="text" class="form-control" id="CuatrimestreID" name="CuatrimestreID" value="{[{datosMateria.CuatrimestreID}]}" readonly="readonly">
+
+					<button type="submit" class="btn btn-primary" style="margin-top: 10px;">Modificar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- SCRIPT PARA ANGULAR-->
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
+
+	app.controller('controller-modificaMateria',function($scope,$http) {
+		
+		$http.get("/getMaterias").then(function(response) {
+	        $scope.materias = response.data;
+	    });
+
+	    $scope.MateriaSelected = function(){
+			$http.get("/getMaterias?id="+$scope.OptionSelected).then(function(response) {
+				$scope.datosMateria = response.data[0];
+				console.log($scope.datosMateria);
+		    });
+		};
+	});
+</script>

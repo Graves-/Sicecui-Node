@@ -19,7 +19,6 @@
 
 	<div class="row" style="padding-bottom: 50px;">
 		<form action="/updateMaestro" method="POST" role="form">
-			<legend>Inscripción de Maestro</legend>
 		
 			<div class="row">
 				<div class="form-group">
@@ -90,7 +89,7 @@
 	    });
 
 	    $scope.MaestroSelected = function(){
-	    	alert($scope.OptionSelected);
+	    	//alert($scope.OptionSelected);
 			$http.get("/getPersonaMaestro?id="+$scope.OptionSelected).then(function(response) {
 		        $scope.persona = response.data[0];
 		        document.getElementById('Nombre').value = response.data[0].Nombre;
