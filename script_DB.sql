@@ -78,3 +78,25 @@ create table Cursando(
 	FOREIGN KEY (MateriaID) REFERENCES Materias(MateriaID),
 	FOREIGN KEY (AlumnoID) REFERENCES Persona(PersonaID)
 );
+
+create table Mes(
+	MesID integer NOT NULL,
+	Nombre varchar(255) NOT NULL,
+	PRIMARY KEY (MesID)
+);
+
+/*
+insert into Mes values(1,'Enero');
+insert into Mes values(2,'Febrero');
+insert into Mes values(3,'Marzo');
+insert into Mes values(4,'Abril');
+insert into Mes values(5,'Mayo');
+insert into Mes values(6,'Junio');
+insert into Mes values(7,'Julio');
+insert into Mes values(8,'Agosto');
+insert into Mes values(9,'Septiembre');
+insert into Mes values(10,'Octubre');
+insert into Mes values(11,'Noviembre');
+insert into Mes values(12,'Diciembre');
+	*/
+

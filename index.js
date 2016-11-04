@@ -64,6 +64,19 @@ app.get('/asignarMaterias', function(req,res) {
 app.get('/kardex', function(req,res) {
 	res.render('kardex');
 });
+
+app.get('/pagos', function(req,res) {
+	res.render('pagos');
+});
+
+app.get('/modificaAlumno', function(req, res) {
+	res.render('modificaAlumno');
+});
+
+app.get('/modificaMaestro', function(req, res) {
+	res.render('modificaMaestro');
+});
+
 //POST HEADERS - application/x-www-form-urlencoded
 //GET POST DATA WITH ExpressJS - req.body.variable_name
 
@@ -91,7 +104,7 @@ app.post('/insertMaestro',function(req,res){
 			res.render('500');
 		}else{
 			console.log(result);
-			res.redirect('/inscripcionMaestro');
+			res.redirect('/inscripcionMaestros');
 		}
 	});
 	console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL' 
@@ -125,6 +138,36 @@ app.post('/insertAlumno',function(req,res){
 		}
 	});
 	console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL' 
+});
+
+//UPDATE DE ALUMNO (tabla Persona) DE ACUARDO A LOS DATOS LLENADOS EN EL FORMULARIO
+app.post('/updateAlumno', function(req,res) {
+	var sql = "UPDATE Persona SET Nombre='"+req.body.Nombre+"', ApellidoPeterno='"+req.body.ApellidoPeterno+"',ApellidoMaterno='"+req.body.ApellidoMaterno+"',Telefono='"+req.body.Telefono+"',municipio='"+req.body.municipio+"',Entidad='"+req.body.Entidad+"',Direccion='"+req.body.Direccion+"',CURP='"+req.body.CURP+"',Email='"+req.body.Email+"',CuatrimestreID="+req.body.CuatrimestreID+",CarreraID='"+req.body.CarreraID+"',Trabaja='"+req.body.Trabaja+"' WHERE PersonaID = " + req.body.PersonaID + " AND PerfilID = 1"
+	console.log(sql);
+	connection.query(sql, function (err, result) {
+	  if (err){
+			console.log(err);
+			res.render('500');
+		}else{
+			console.log(result);
+			res.redirect('/modificaAlumno');
+		}
+	});
+});
+
+//UPDATE DE MAESTRO (tabla Persona) DE ACUARDO A LOS DATOS LLENADOS EN EL FORMULARIO
+app.post('/updateMaestro', function(req,res) {
+	var sql = "UPDATE Persona SET Nombre='"+req.body.Nombre+"', ApellidoPeterno='"+req.body.ApellidoPeterno+"',ApellidoMaterno='"+req.body.ApellidoMaterno+"',Telefono='"+req.body.Telefono+"',municipio='"+req.body.municipio+"',Entidad='"+req.body.Entidad+"',Direccion='"+req.body.Direccion+"',CURP='"+req.body.CURP+"',Email='"+req.body.Email+"',CuatrimestreID="+req.body.CuatrimestreID+",CarreraID='"+req.body.CarreraID+"',Trabaja='"+req.body.Trabaja+"' WHERE PersonaID = " + req.body.PersonaID + " AND PerfilID = 1"
+	console.log(sql);
+	connection.query(sql, function (err, result) {
+	  if (err){
+			console.log(err);
+			res.render('500');
+		}else{
+			console.log(result);
+			res.redirect('/modificaAlumno');
+		}
+	});
 });
 
 //INSERTA UNA CARRERA EN LA BD
@@ -179,6 +222,17 @@ app.get('/getAlumnos', function (req, res) {
 app.get('/getPersonaAlumno', function(req,res) {
 	//PARA LLEVAR A CABO UN SELECT EN LA BD - de una persona en específico
 	var sql = 'select * from Persona where PersonaID = ' + req.query.id + ' and PerfilID = 1';
+	console.log(sql);
+	connection.query(sql, function(err, rows, fields) {
+	  if (err) throw err;
+	  res.send(JSON.stringify(rows));
+	});
+});
+
+//OBTIENE DETALLES E INFORMACION DEL MAESTRO DE LA TABLA Persona
+app.get('/getPersonaMaestro', function(req,res) {
+	//PARA LLEVAR A CABO UN SELECT EN LA BD - de una persona en específico
+	var sql = 'select * from Persona where PersonaID = ' + req.query.id + ' and PerfilID = 2';
 	console.log(sql);
 	connection.query(sql, function(err, rows, fields) {
 	  if (err) throw err;

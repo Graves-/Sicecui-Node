@@ -1,0 +1,22 @@
+<div class="container" style="padding-top: 80px;" ng-controller="controller-pagos">
+	<div class="page-header">
+	  <h1>Pagos&nbsp;<small>SICECUI</small></h1>
+	</div>
+
+	<div class="row">
+		
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
+
+	app.controller('controller-pagos',function($scope,$http) {
+		
+	});
+</script>

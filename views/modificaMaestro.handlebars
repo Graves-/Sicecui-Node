@@ -1,0 +1,111 @@
+<div class="container" style="padding-top: 80px;" ng-controller="controller-modificaMaestro">
+	<div class="page-header">
+	  <h1>Modificación&nbsp;<small>Maestros</small></h1>
+	</div>
+
+	<!-- SECCION PARA FILTRO DE ALUMNO -->
+	<div class="row">
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<label>Filtro: </label>
+			<input type="text" name="" id="" class="form-control" placeholder="Nombre del Maestro" ng-model="FiltroMaestro" >
+		</div>
+		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+			<label>Elegir maestro: </label>
+			<select class="form-control" ng-change="MaestroSelected()" ng-model="OptionSelected">
+				<option ng-repeat="maestro in maestros | filter: FiltroMaestro" value="{[{maestro.PersonaID}]}">{[{maestro.Nombre + " " + maestro.ApellidoPeterno + " " + maestro.ApellidoMaterno}]}</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row" style="padding-bottom: 50px;">
+		<form action="/updateMaestro" method="POST" role="form">
+			<legend>Inscripción de Maestro</legend>
+		
+			<div class="row">
+				<div class="form-group">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+						<label>ID de Maestro</label>
+						<input type="text" class="form-control has-success" id="PersonaID" name="PersonaID" value="{[{persona.PersonaID}]}" readonly="readonly">
+
+						<label for="Nombre">Nombre</label>
+						<input type="text" class="form-control" id="Nombre" name="Nombre">
+
+						<label for="ApellidoPeterno">Apellido Paterno</label>
+						<input type="text" class="form-control" id="ApellidoPeterno" name="ApellidoPeterno">
+
+						<label for="ApellidoMaterno">Apellido Materno</label>
+						<input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno">
+
+						<label for="Email">Correo Electrónico</label>
+						<input type="email" class="form-control" id="Email" name="Email">
+
+						<label for="RFC">RFC</label>
+						<input type="text" class="form-control" id="RFC" name="RFC">
+
+						<label for="NombreBeneficiario">Nombre Beneficiario</label>
+						<input type="text" class="form-control" id="NombreBeneficiario" name="NombreBeneficiario">
+
+						<label for="DireccionBeneficiario">Dirección Beneficiario</label>
+						<input type="text" class="form-control" id="DireccionBeneficiario" name="DireccionBeneficiario">
+
+					</div>
+
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<label for="CURP">CURP</label>
+						<input type="text" class="form-control" id="CURP" name="CURP">
+
+						<label for="municipio">Municipio</label>
+						<input type="text" class="form-control" id="municipio" name="municipio">
+
+						<label for="Entidad">Entidad</label>
+						<input type="text" class="form-control" id="Entidad" name="Entidad">
+
+						<label for="Direccion">Dirección</label>
+						<input type="text" class="form-control" id="Direccion" name="Direccion">
+
+						<label for="Telefono">Teléfono</label>
+						<input type="text" class="form-control" id="Telefono" name="Telefono">
+						
+						<button type="submit" class="btn btn-primary pull-right" style="margin-top: 20px;">Modificar</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- SCRIPT PARA ANGULAR-->
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
+
+	app.controller('controller-modificaMaestro',function($scope,$http) {
+		
+		$http.get("/getMaestros").then(function(response) {
+	        $scope.maestros = response.data;
+	    });
+
+	    $scope.MaestroSelected = function(){
+	    	alert($scope.OptionSelected);
+			$http.get("/getPersonaMaestro?id="+$scope.OptionSelected).then(function(response) {
+		        $scope.persona = response.data[0];
+		        document.getElementById('Nombre').value = response.data[0].Nombre;
+		        document.getElementById('ApellidoPeterno').value = response.data[0].ApellidoPeterno;
+		        document.getElementById('ApellidoMaterno').value = response.data[0].ApellidoMaterno;
+		        document.getElementById('Email').value = response.data[0].Email;
+		        document.getElementById('CURP').value = response.data[0].CURP;
+		        document.getElementById('municipio').value = response.data[0].municipio;
+		        document.getElementById('Entidad').value = response.data[0].Entidad;
+		        document.getElementById('Direccion').value = response.data[0].Direccion;
+		        document.getElementById('Telefono').value = response.data[0].Telefono;
+		        document.getElementById('RFC').value = response.data[0].RFC;
+		        document.getElementById('NombreBeneficiario').value = response.data[0].NombreBeneficiario;
+		        document.getElementById('DireccionBeneficiario').value = response.data[0].DireccionBeneficiario;
+		    });
+		};
+	});
+</script>
