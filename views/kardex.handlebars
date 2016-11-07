@@ -49,16 +49,18 @@
 	    $scope.AlumnoSelected = function(){
 			$http.get("/getPersonaAlumno?id="+$scope.OptionSelected).then(function(response) {
 		        $scope.persona = response.data[0];
+		        var PersonaID = response.data[0].PersonaID;
 		        var CuatrimestreID = response.data[0].CuatrimestreID;
 		        var CarreraID = response.data[0].CarreraID;
 		        $http.get("/getMateriasAlumno?cuat="+CuatrimestreID+"&carrera="+CarreraID).then(function(response) {
 			        $scope.materias = response.data;
 			    });
+			    $http.get("/getCursando?AlumnoID="+PersonaID).then(function(response) {
+			        $scope.cursando = response.data;
+			    });
 		    });
 		};
 		
-	    $http.get("/getCursando?AlumnoID=1").then(function(response) {
-	        $scope.cursando = response.data;
-	    });
+	    
 	});
 </script>

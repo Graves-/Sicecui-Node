@@ -1,4 +1,4 @@
-<div class="container-fluid" style="padding-top:80px;">
+<div class="container-fluid" style="padding-top:80px;" ng-controller="controller-inscripcion">
 	<form action="/insertAlumno" method="POST" role="form">
 		<legend>Inscripción de Alumno</legend>
 	
@@ -19,7 +19,7 @@
 
 					<label for="CarreraID">Carrera</label>
 					<select class="form-control" id="CarreraID" name="CarreraID"  required="required">
-						<option value="LED" selected="selected">Llicenciatura en Derecho</option>
+						<option ng-repeat="carrera in carreras" value="{[{carrera.CarreraID}]}" selected="selected">{[{carrera.Nombre}]}</option>
 					</select>
 
 					<label for="CuatrimestreID">Cuatrimestre</label>
@@ -65,3 +65,16 @@
 	</form>
 </div>
 
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
+
+	app.controller('controller-inscripcion',function($scope,$http) {
+		$http.get("/getCarreras").then(function(response) {
+	        $scope.carreras = response.data;
+	    });
+	});
+</script>
