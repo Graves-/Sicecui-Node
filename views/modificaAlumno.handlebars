@@ -27,58 +27,63 @@
 						<input type="text" class="form-control has-success" id="PersonaID" name="PersonaID" value="{[{persona.PersonaID}]}" readonly="readonly">
 
 						<label for="Nombre">Nombre</label>
-						<input type="text" class="form-control" id="Nombre" name="Nombre">
+						<input type="text" class="form-control" id="Nombre" name="Nombre" value="{[{persona.Nombre}]}">
 
 						<label for="ApellidoPeterno">Apellido Paterno</label>
-						<input type="text" class="form-control" id="ApellidoPeterno" name="ApellidoPeterno">
+						<input type="text" class="form-control" id="ApellidoPeterno" name="ApellidoPeterno" value="{[{persona.ApellidoPeterno}]}">
 
 						<label for="ApellidoMaterno">Apellido Materno</label>
-						<input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno">
+						<input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno" value="{[{persona.ApellidoMaterno}]}">
 
 						<label for="Email">Correo Electrónico</label> 
-						<input type="email" class="form-control" id="Email" name="Email">
+						<input type="email" class="form-control" id="Email" name="Email" value="{[{persona.Email}]}">
 
 						<label for="CarreraID">Carrera</label>
 						<select class="form-control" id="CarreraID" name="CarreraID"  required="required">
-							<option value="LED" selected="selected">Llicenciatura en Derecho</option>
-							<option value="LEA" selected="selected">Llicenciatura en Administración</option>
-							<option value="LEI" selected="selected">Llicenciatura en Informática</option>
+							<option ng-repeat="carrera in Carreras" value="{[{carrera.CarreraID}]}" ng-selected="CarreraRes == carrera.CarreraID">{[{carrera.Nombre}]}</option>
 						</select>
 
 						<label for="CuatrimestreID">Cuatrimestre</label>
 						<select class="form-control" id="CuatrimestreID" name="CuatrimestreID">
-							<option value="1">PRIMER CUATRIMESTRE</option>
-							<option value="2">SEGUNDO CUATRIMESTRE</option>
-							<option value="3">TERCER CUATRIMESTRE</option>
-							<option value="4">CUARTO CUATRIMESTRE</option>
-							<option value="5">QUINTO CUATRIMESTRE</option>
-							<option value="6">SEXTO CUATRIMESTRE</option>
-							<option value="7">SEPTIMO CUATRIMESTRE</option>
-							<option value="8">OCTAVO CUATRIMESTRE</option>
-							<option value="9">DECIMO CUATRIMESTRE</option>
+							<option value="1" ng-selected="1 == CuatrimestreRes">PRIMER CUATRIMESTRE</option>
+							<option value="2" ng-selected="2 == CuatrimestreRes">SEGUNDO CUATRIMESTRE</option>
+							<option value="3" ng-selected="3 == CuatrimestreRes">TERCER CUATRIMESTRE</option>
+							<option value="4" ng-selected="4 == CuatrimestreRes">CUARTO CUATRIMESTRE</option>
+							<option value="5" ng-selected="5 == CuatrimestreRes">QUINTO CUATRIMESTRE</option>
+							<option value="6" ng-selected="6 == CuatrimestreRes">SEXTO CUATRIMESTRE</option>
+							<option value="7" ng-selected="7 == CuatrimestreRes">SEPTIMO CUATRIMESTRE</option>
+							<option value="8" ng-selected="8 == CuatrimestreRes">OCTAVO CUATRIMESTRE</option>
+							<option value="9" ng-selected="9 == CuatrimestreRes">NOVENO CUATRIMESTRE</option>
+							<option value="10" ng-selected="10 == CuatrimestreRes">DÉCIMO CUATRIMESTRE</option>
 						</select>
+
 					</div>
 
 					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 						<label for="CURP">CURP</label>
-						<input type="text" class="form-control" id="CURP" name="CURP">
+						<input type="text" class="form-control" id="CURP" name="CURP" value="{[{persona.CURP}]}">
 
 						<label for="municipio">Municipio</label>
-						<input type="text" class="form-control" id="municipio" name="municipio">
+						<input type="text" class="form-control" id="municipio" name="municipio" value="{[{persona.municipio}]}">
 
 						<label for="Entidad">Entidad</label>
-						<input type="text" class="form-control" id="Entidad" name="Entidad">
+						<input type="text" class="form-control" id="Entidad" name="Entidad" value="{[{persona.Entidad}]}">
 
 						<label for="Direccion">Dirección</label>
-						<input type="text" class="form-control" id="Direccion" name="Direccion">
+						<input type="text" class="form-control" id="Direccion" name="Direccion" value="{[{persona.Direccion}]}">
 
 						<label for="Telefono">Teléfono</label>
-						<input type="text" class="form-control" id="Telefono" name="Telefono">
+						<input type="text" class="form-control" id="Telefono" name="Telefono" value="{[{persona.Telefono}]}">
 
 						<label for="Trabaja">Trabaja?</label>
 						<select class="form-control" id="Trabaja" name="Trabaja">
 							<option value="SI">SI</option>
 							<option value="NO">NO</option>
+						</select>
+
+						<label for="StatusAlumno">Status</label>
+						<select class="form-control" id="StatusAlumno" name="StatusAlumno">
+							<option ng-repeat="item in status" value="{[{item.StatusID}]}" ng-selected="Status == item.StatusID">{[{item.Nombre}]}</option>
 						</select>
 
 						<button type="submit" class="btn btn-primary pull-right" style="margin-top: 20px;">Modificar</button>
@@ -103,22 +108,20 @@
 	        $scope.alumnos = response.data;
 	    });
 
+	    $http.get("/getStatus").then(function(response) {
+	        $scope.status = response.data;
+	    });
+
+	    $http.get("/getCarreras").then(function(response) {
+	        $scope.Carreras = response.data;
+	    });
+
 	    $scope.AlumnoSelected = function(){
 			$http.get("/getPersonaAlumno?id="+$scope.OptionSelected).then(function(response) {
 		        $scope.persona = response.data[0];
-		        console.log($scope.persona);
-		        document.getElementById('Nombre').value = response.data[0].Nombre;
-		        document.getElementById('ApellidoPeterno').value = response.data[0].ApellidoPeterno;
-		        document.getElementById('ApellidoMaterno').value = response.data[0].ApellidoMaterno;
-		        document.getElementById('Email').value = response.data[0].Email;
-		        document.getElementById('CarreraID').value = response.data[0].CarreraID;
-		        document.getElementById('CURP').value = response.data[0].CURP;
-		        document.getElementById('municipio').value = response.data[0].municipio;
-		        document.getElementById('Entidad').value = response.data[0].Entidad;
-		        document.getElementById('Direccion').value = response.data[0].Direccion;
-		        document.getElementById('Telefono').value = response.data[0].Telefono;
-		        document.getElementById('Trabaja').value = response.data[0].Trabaja;
-		        document.getElementById('CuatrimestreID').value = response.data[0].CuatrimestreID;
+		        $scope.Status = response.data[0].StatusID;
+		        $scope.CuatrimestreRes = response.data[0].CuatrimestreID;
+		        $scope.CarreraRes = response.data[0].CarreraID;
 		    });
 		};
 	});

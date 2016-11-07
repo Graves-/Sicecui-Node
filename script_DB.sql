@@ -6,11 +6,31 @@ create table Carrera(
 	PRIMARY KEY (CarreraID)
 );
 
+/*
+insert into Carrera values('LEI','LICENCIATURA EN INFORMÁTICA');
+insert into Carrera values('LEA','LICENCIATURA EN ADMINISTRACIÓN');
+insert into Carrera values('LED','LICENCIATURA EN DERECHO');
+*/
+
 create table Cuatrimestre(
 	CuatrimestreID integer NOT NULL,
 	Nombre varchar(255),
 	PRIMARY KEY (CuatrimestreID)
 );
+
+/*
+insert into Cuatrimestre values(1,'PRIMER CUATRIMESTRE');
+insert into Cuatrimestre values(2,'SEGUNDO CUATRIMESTRE');
+insert into Cuatrimestre values(3,'TERCER CUATRIMESTRE');
+insert into Cuatrimestre values(4,'CUARTO CUATRIMESTRE');
+insert into Cuatrimestre values(5,'QUINTO CUATRIMESTRE');
+insert into Cuatrimestre values(6,'SEXTO CUATRIMESTRE');
+insert into Cuatrimestre values(7,'SEPTIMO CUATRIMESTRE');
+insert into Cuatrimestre values(8,'OCTAVO CUATRIMESTRE');
+insert into Cuatrimestre values(9,'NOVENO CUATRIMESTRE');
+insert into Cuatrimestre values(10,'DECIMO CUATRIMESTRE');
+*/
+
 
 create table Materias(
 	MateriaID varchar(255) NOT NULL,
@@ -34,6 +54,11 @@ create table Perfil(
 	PRIMARY KEY (PerfilID)
 );
 
+/*
+insert into Perfil values(1,'Alumno','El perfil tiene permisos y opciones correspondientes a Alumnos.');
+insert into Perfil values(2,'Maestro','El perfil tiene permisos y opciones correspondientes a Maestros.');
+*/
+
 create table Persona(
 	PersonaID integer NOT NULL AUTO_INCREMENT,
 	Nombre varchar(255),
@@ -52,10 +77,12 @@ create table Persona(
 	DireccionBeneficiario varchar(255),
 	CuatrimestreID integer,
 	CarreraID varchar(255),
+	StatusID varchar(3),
 	PRIMARY KEY (PersonaID),
 	FOREIGN KEY (PerfilID) REFERENCES Perfil(PerfilID),
 	FOREIGN KEY (CuatrimestreID) REFERENCES Cuatrimestre(CuatrimestreID),
-	FOREIGN KEY (CarreraID) REFERENCES Carrera(CarreraID)
+	FOREIGN KEY (CarreraID) REFERENCES Carrera(CarreraID),
+	FOREIGN KEY (StatusID) REFERENCES StatusAlumno(StatusID)
 );
 
 create table Imparte(
@@ -98,5 +125,19 @@ insert into Mes values(9,'Septiembre');
 insert into Mes values(10,'Octubre');
 insert into Mes values(11,'Noviembre');
 insert into Mes values(12,'Diciembre');
-	*/
+*/
 
+create table StatusAlumno(
+	StatusID varchar(3) NOT NULL,
+	Nombre varchar(255),
+	PRIMARY KEY (StatusID)
+);
+
+/*
+insert into StatusAlumno values('REG','Regular');
+insert into StatusAlumno values('IRG','Irregular');
+insert into StatusAlumno values('MLB','Materias Libres');
+insert into StatusAlumno values('BAJ','Baja');
+insert into StatusAlumno values('EGR','Egresado');
+insert into StatusAlumno values('TIT','Titulado');
+*/

@@ -34,6 +34,11 @@
 						<option value="8">OCTAVO CUATRIMESTRE</option>
 						<option value="9">DECIMO CUATRIMESTRE</option>
 					</select>
+
+					<label for="StatusAlumno">Status</label>
+					<select class="form-control" id="StatusAlumno" name="StatusAlumno">
+						<option ng-repeat="item in status" value="{[{item.StatusID}]}">{[{item.Nombre}]}</option>
+					</select>
 				</div>
 
 				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -75,6 +80,10 @@
 	app.controller('controller-inscripcion',function($scope,$http) {
 		$http.get("/getCarreras").then(function(response) {
 	        $scope.carreras = response.data;
+	    });
+
+	    $http.get("/getStatus").then(function(response) {
+	        $scope.status = response.data;
 	    });
 	});
 </script>

@@ -133,6 +133,7 @@ app.post('/insertAlumno',function(req,res){
 		Email : req.body.Email,
 		PerfilID : 1,
 		CuatrimestreID : req.body.CuatrimestreID,
+		StatusID : req.body.StatusAlumno,
 		CarreraID: req.body.CarreraID,
 		Trabaja: req.body.Trabaja
 	};
@@ -150,7 +151,7 @@ app.post('/insertAlumno',function(req,res){
 
 //UPDATE DE ALUMNO (tabla Persona) DE ACUARDO A LOS DATOS LLENADOS EN EL FORMULARIO
 app.post('/updateAlumno', function(req,res) {
-	var sql = "UPDATE Persona SET Nombre='"+req.body.Nombre+"', ApellidoPeterno='"+req.body.ApellidoPeterno+"',ApellidoMaterno='"+req.body.ApellidoMaterno+"',Telefono='"+req.body.Telefono+"',municipio='"+req.body.municipio+"',Entidad='"+req.body.Entidad+"',Direccion='"+req.body.Direccion+"',CURP='"+req.body.CURP+"',Email='"+req.body.Email+"',CuatrimestreID="+req.body.CuatrimestreID+",CarreraID='"+req.body.CarreraID+"',Trabaja='"+req.body.Trabaja+"' WHERE PersonaID = " + req.body.PersonaID + " AND PerfilID = 1"
+	var sql = "UPDATE Persona SET Nombre='"+req.body.Nombre+"', ApellidoPeterno='"+req.body.ApellidoPeterno+"',ApellidoMaterno='"+req.body.ApellidoMaterno+"', StatusID = '"+req.body.StatusAlumno+"',Telefono='"+req.body.Telefono+"',municipio='"+req.body.municipio+"',Entidad='"+req.body.Entidad+"',Direccion='"+req.body.Direccion+"',CURP='"+req.body.CURP+"',Email='"+req.body.Email+"',CuatrimestreID="+req.body.CuatrimestreID+",CarreraID='"+req.body.CarreraID+"',Trabaja='"+req.body.Trabaja+"' WHERE PersonaID = " + req.body.PersonaID + " AND PerfilID = 1"
 	console.log(sql);
 	connection.query(sql, function (err, result) {
 	  if (err){
@@ -256,7 +257,7 @@ app.get('/getCarreras', function (req, res) {
 //OBTIENE LA LISTA DE TODOS LOS ALUMNOS EN LA TABLA Persona EN LA BD
 app.get('/getAlumnos', function (req, res) {
 	//PARA LLEVAR A CABO UN SELECT EN LA BD - de la lista de alumnos
-	connection.query('select p.PersonaID,p.Nombre,ApellidoPeterno,ApellidoMaterno,Telefono,municipio,Entidad,Direccion,CURP,Trabaja,Email,c.CarreraID,c.Nombre as NombreCarrera, CuatrimestreID from persona p left join carrera c on c.CarreraID=p.CarreraID where PerfilID = 1', function(err, rows, fields) {
+	connection.query('select p.PersonaID,p.Nombre,ApellidoPeterno,ApellidoMaterno,s.Nombre as Status,Telefono,municipio,Entidad,Direccion,CURP,Trabaja,Email,c.CarreraID,c.Nombre as NombreCarrera, CuatrimestreID from persona p left join carrera c on c.CarreraID=p.CarreraID join StatusAlumno s on p.StatusID=s.StatusID where PerfilID = 1', function(err, rows, fields) {
 	  if (err) throw err;
 	  res.send(JSON.stringify(rows));
 	});
@@ -319,6 +320,13 @@ app.get('/getMateriasAlumno', function (req, res) {
 //OBTIENE DE TALLES DE LAS LISTAS DE CADA MATERIA
 app.get('/getCursando', function(req,res) {
 	connection.query("select * from Cursando c join Materias m on c.MateriaID=m.MateriaID where AlumnoID = " + req.query.AlumnoID, function(err, rows, fields) {
+	  if (err) throw err;
+	  res.send(JSON.stringify(rows));
+	});
+});
+
+app.get('/getStatus', function(req,res) {
+	connection.query("select * from StatusAlumno", function(err, rows, fields) {
 	  if (err) throw err;
 	  res.send(JSON.stringify(rows));
 	});
