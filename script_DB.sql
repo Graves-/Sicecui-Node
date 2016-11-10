@@ -141,3 +141,32 @@ insert into StatusAlumno values('BAJ','Baja');
 insert into StatusAlumno values('EGR','Egresado');
 insert into StatusAlumno values('TIT','Titulado');
 */
+
+create table Año(
+	AñoID integer NOT NULL,
+	PRIMARY KEY (AñoID)
+);
+
+/*
+insert into Año VALUES(2012);
+insert into Año VALUES(2013);
+insert into Año VALUES(2014);
+insert into Año VALUES(2015);
+insert into Año VALUES(2016);
+insert into Año VALUES(2017);
+insert into Año VALUES(2018);
+*/
+
+create table Pagos(
+	ReciboID integer NOT NULL AUTO_INCREMENT,
+	PersonaID integer NOT NULL,
+	CantidadNum decimal NOT NULL,
+	CantidadLetra varchar(255) NOT NULL,
+	Concepto varchar(255) NOT NULL,
+	AñoID integer NOT NULL,
+	MesID integer NOT NULL,
+	PRIMARY KEY (ReciboID,PersonaID,AñoID,MesID),
+	FOREIGN KEY (PersonaID) REFERENCES Persona (PersonaID),
+	FOREIGN KEY (AñoID) REFERENCES Año (AñoID),
+	FOREIGN KEY (MesID) REFERENCES Mes (MesID)
+);
