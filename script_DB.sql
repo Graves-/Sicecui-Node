@@ -163,10 +163,13 @@ create table Pagos(
 	CantidadNum decimal NOT NULL,
 	CantidadLetra varchar(255) NOT NULL,
 	Concepto varchar(255) NOT NULL,
-	AñoID integer NOT NULL,
+	AnoID integer NOT NULL,
 	MesID integer NOT NULL,
-	PRIMARY KEY (ReciboID,PersonaID,AñoID,MesID),
+	Dia integer NOT NULL,
+	PRIMARY KEY (ReciboID,PersonaID,AnoID,MesID),
 	FOREIGN KEY (PersonaID) REFERENCES Persona (PersonaID),
-	FOREIGN KEY (AñoID) REFERENCES Año (AñoID),
+	FOREIGN KEY (AnoID) REFERENCES Año (AñoID),
 	FOREIGN KEY (MesID) REFERENCES Mes (MesID)
 );
+
+/*insert into Pagos(PersonaID,CantidadNum,CantidadLetra,Concepto,AnoID,MesID,Dia) Values(2,1500,'MIL QUINIENTOS PESOS','PAGO MENSUAL NOVIEMBRE 2016',2016,11,10);*/

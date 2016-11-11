@@ -4,7 +4,93 @@
 	</div>
 
 	<div class="row">
-		
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<a href="" class="btn btn-info" style="width: 100%" ng-click="optionSelected = 1"><h3><i class="material-icons">payment</i></h3>&nbsp;Registrar Pago</a>
+		</div>
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<a href="" class="btn btn-info" style="width: 100%" ng-click="optionSelected = 2"><h3><i class="material-icons">print</i></h3>Imprimir Recibo</a>
+		</div>
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<a href="" class="btn btn-info" style="width: 100%" ng-click="optionSelected = 3"><h3><i class="material-icons">list</i></h3>Ver Registro de Pagos</a>
+		</div>
+	</div>
+
+	<!-- SECCION PARA REGISTRAR PAGO -->	
+	<div class="row" style="padding-top: 50px;" ng-show="optionSelected == 1">
+		<form class="form-horizontal" action="/registrarPago" method="POST">
+			<fieldset>
+			    <legend>Recibo de Pago</legend>
+			    <div class="form-group">
+			      <label for="Nombre" class="col-lg-2 control-label">Nombre</label>
+			      <div class="col-lg-6">
+			        <input type="text" class="form-control" id="Nombre" name="Nombre" placeholder="Nombre">
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label for="ApellidoPeterno" class="col-lg-2 control-label">Apellido Paterno</label>
+			      <div class="col-lg-6">
+			        <input type="text" class="form-control" id="ApellidoPeterno" name="ApellidoPeterno" placeholder="Apellido Paterno" required="required">
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label for="ApellidoMaterno" class="col-lg-2 control-label">Apellido Paterno</label>
+			      <div class="col-lg-6">
+			        <input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno" placeholder="Apellido Materno" required="required">
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label for="CarreraID" class="col-lg-2 control-label">Licenciatura</label>
+			      <div class="col-lg-6">
+				      	<select class="form-control" id="CarreraID" name="CarreraID"  required="required">
+							<option ng-repeat="carrera in carreras" value="{[{carrera.CarreraID}]}" selected="selected">{[{carrera.Nombre}]}</option>
+						</select>
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label for="CantidadNum" class="col-lg-2 control-label">Cantidad</label>
+			      <div class="col-lg-3">
+			        <input type="number" class="form-control" id="CantidadNum" name="CantidadNum" placeholder="Cantidad en Número" required="required">
+			      </div>
+			      <div class="col-lg-3">
+			        <input type="text" class="form-control" id="CantidadLetra" name="CantidadLetra" placeholder="Cantidad en Letra" required="required">
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <label for="Concepto" class="col-lg-2 control-label">Concepto</label>
+			      <div class="col-lg-6">
+			        <input type="text" class="form-control" id="Concepto" name="Concepto" placeholder="Concepto" required="required">
+			      </div>
+			    </div>
+			    <div class="form-group">
+			      <div class="col-lg-offset-2">
+			        <h4>San José Iturbide, Guanajuato a {[{fecha.getDay()}]} de {[{fecha.getMonth()+1}]} del {[{fecha.getFullYear()}]} .</h4>
+			      </div>
+			    </div>
+			    
+			    <div class="form-group">
+			      <div class="col-lg-10 col-lg-offset-2">
+			        <button type="reset" class="btn btn-default">Cancelar</button>
+			        <button type="submit" class="btn btn-primary">Registrar</button>
+			      </div>
+			    </div>
+			</fieldset>
+		</form>
+	</div>
+
+	<!-- SECCION PARA IMPRIMIR UN RECIBO -->
+	<div class="row" style="padding-top: 50px;" ng-show="optionSelected == 2">
+		<h1>2</h1>
+	</div>
+
+	<!-- SECCION PARA VER LOS REGISTROS DE PAGOS -->
+	<div class="row" style="padding-top: 50px;" ng-show="optionSelected == 3">
+		<ul class="list-group" ng-repeat="pago in DatosPagos">
+			<li class="list-group-item active">{[{pago.Nombre + " " + pago.ApellidoPeterno + " " + pago.ApellidoMaterno}]}</li>
+			<li class="list-group-item">{[{pago.Concepto}]}</li>
+			<li class="list-group-item">${[{pago.CantidadNum}]} MXN</li>
+			<li class="list-group-item">{[{pago.CantidadLetra}]}</li>
+			<li class="list-group-item">{[{pago.Dia + "/" + pago.MesID + "/" + pago.AnoID}]}</li>
+		</ul>
 	</div>
 </div>
 
@@ -16,7 +102,18 @@
 	  $interpolateProvider.endSymbol('}]}');
 	});
 
+	//insert into Pagos(PersonaID,CantidadNum,CantidadLetra,Concepto,AñoID,MesID) Values(2,1500,'MIL QUINIENTOS PESOS','PAGO MENSUAL NOVIEMBRE 2016',2016,11);
 	app.controller('controller-pagos',function($scope,$http) {
-		
+
+		$scope.fecha = new Date();
+
+		$http.get("/getCarreras").then(function(response) {
+	        $scope.carreras = response.data;
+	    });
+
+	    $http.get("/getPagos").then(function(response) {
+	        $scope.DatosPagos = response.data;
+	        console.log(response.data);
+	    });
 	});
 </script>
