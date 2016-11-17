@@ -152,6 +152,34 @@ app.post('/insertAlumno',function(req,res){
 	console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL' 
 });
 
+app.post('/insertPago', function(req,res) {
+	var fecha = new Date();
+
+	if (req.body.PersonaID != '') {
+		var pago = {
+			PersonaID: req.body.PersonaID,
+			CantidadNum: req.body.CantidadNum,
+			CantidadLetra: req.body.CantidadLetra,
+			Concepto: req.body.Concepto,
+			AnoID: fecha.getFullYear(),
+			MesID: fecha.getMonth()+1,
+			Dia: fecha.getDay()
+		};
+		var query = connection.query('INSERT INTO Pagos SET ?', pago, function(err, result) {
+			if (err){
+				console.log(err);
+				res.render('500');
+			}else{
+				console.log(result);
+				res.redirect('/pagos');
+			}
+		});
+	}else{
+		console.log('PersonaID no definido.');
+		res.redirect('/pagos?error=ID');
+	}
+});
+
 //UPDATE DE ALUMNO (tabla Persona) DE ACUARDO A LOS DATOS LLENADOS EN EL FORMULARIO
 app.post('/updateAlumno', function(req,res) {
 	var sql = "UPDATE Persona SET Nombre='"+req.body.Nombre+"', ApellidoPeterno='"+req.body.ApellidoPeterno+"',ApellidoMaterno='"+req.body.ApellidoMaterno+"', StatusID = '"+req.body.StatusAlumno+"',Telefono='"+req.body.Telefono+"',municipio='"+req.body.municipio+"',Entidad='"+req.body.Entidad+"',Direccion='"+req.body.Direccion+"',CURP='"+req.body.CURP+"',Email='"+req.body.Email+"',CuatrimestreID="+req.body.CuatrimestreID+",CarreraID='"+req.body.CarreraID+"',Trabaja='"+req.body.Trabaja+"' WHERE PersonaID = " + req.body.PersonaID + " AND PerfilID = 1"
@@ -259,11 +287,20 @@ app.get('/getCarreras', function (req, res) {
 
 //OBTIENE LA LISTA DE TODOS LOS ALUMNOS EN LA TABLA Persona EN LA BD
 app.get('/getAlumnos', function (req, res) {
-	//PARA LLEVAR A CABO UN SELECT EN LA BD - de la lista de alumnos
-	connection.query('select p.PersonaID,p.Nombre,ApellidoPeterno,ApellidoMaterno,s.Nombre as Status,Telefono,municipio,Entidad,Direccion,CURP,Trabaja,Email,c.CarreraID,c.Nombre as NombreCarrera, CuatrimestreID from persona p left join carrera c on c.CarreraID=p.CarreraID join StatusAlumno s on p.StatusID=s.StatusID where PerfilID = 1', function(err, rows, fields) {
-	  if (err) throw err;
-	  res.send(JSON.stringify(rows));
-	});
+
+	if (req.query.nombre === undefined) {
+		//PARA LLEVAR A CABO UN SELECT EN LA BD - de la lista de alumnos
+		connection.query('select p.PersonaID,p.Nombre,ApellidoPeterno,ApellidoMaterno,s.Nombre as Status,Telefono,municipio,Entidad,Direccion,CURP,Trabaja,Email,c.CarreraID,c.Nombre as NombreCarrera, CuatrimestreID from persona p left join carrera c on c.CarreraID=p.CarreraID join StatusAlumno s on p.StatusID=s.StatusID where PerfilID = 1', function(err, rows, fields) {
+		  if (err) throw err;
+		  res.send(JSON.stringify(rows));
+		});
+	}else{
+		connection.query("select PersonaID from persona where PerfilID = 1 and CarreraID = '"+req.query.carrera+"' and Nombre='"+req.query.nombre+"' and ApellidoPeterno='"+req.query.apepat+"' and ApellidoMaterno='"+req.query.apemat+"'", function(err, rows, fields) {
+		  if (err) throw err;
+		  res.send(JSON.stringify(rows));
+		});
+	}
+	
 });
 
 //OBTIENE DETALLES E INFORMACION DEL ALUMNO DE LA TABLA Persona
