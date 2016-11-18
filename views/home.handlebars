@@ -1,1 +1,80 @@
-<h1 style="padding-top:50px;">Hello.</h1>
+<style type="text/css">
+	.stat{
+		border: 5px solid #2c3e50;
+		border-radius: 50px;	
+		padding: 10px;
+		background-color: #FFB128;
+	}
+
+	.stat-link{
+		margin-top: 30px;
+	}
+</style>
+
+<div class="container-fluid" ng-controller="controller-home" style="padding-top:80px;">
+	<div class="row text-center">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+			<h2>Alumnos</h2>
+			<h1><span class="stat">{[{resultado.NoAlumnos}]}</span></h1>
+			<a href="/listaAlumnos" class="btn btn-success stat-link">Success</a>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+			<h2>Maestros</h2>
+			<h1><span class="stat">{[{resultado.NoMaestros}]}</span></h1>
+			<a href="/listaMaestros" class="btn btn-success stat-link">Success</a>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+			<h2>Carreras</h2>
+			<h1><span class="stat">{[{resultado.NoCarreras}]}</span></h1>
+			<a href="" class="btn btn-success stat-link">Success</a>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+			<h2>Materias</h2>
+			<h1><span class="stat">{[{resultado.NoMaterias}]}</span></h1>
+			<a href="/listaMaterias" class="btn btn-success stat-link">Success</a>
+		</div>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+	var app = angular.module('sicecui', []);
+	app.config(function($interpolateProvider) {
+	  $interpolateProvider.startSymbol('{[{');
+	  $interpolateProvider.endSymbol('}]}');
+	});
+
+	app.controller('controller-home',function($scope,$http) {
+
+		var NoAlumnos = 0;
+		var NoMaestros = 0;
+		var NoMaterias = 0;
+		var NoCarreras = 0;
+		$scope.resultado = {
+			NoAlumnos : 0,
+			NoMaestros: 0,
+			NoCarreras: 0,
+			NoMaterias: 0
+		};
+
+		$http.get("/getCountAlumnos").then(function(response) {
+	        NoAlumnos = parseInt(response.data);
+	        $http.get("/getCountMaestros").then(function(response) {
+		        NoMaestros = parseInt(response.data);
+		        $http.get("/getCountCarreras").then(function(response) {
+			        NoCarreras = parseInt(response.data);
+			        $http.get("/getCountMaterias").then(function(response) {
+				        NoMaterias = parseInt(response.data);
+				        $scope.resultado.NoAlumnos = NoAlumnos;
+				        $scope.resultado.NoMaestros = NoMaestros;
+				        $scope.resultado.NoCarreras = NoCarreras;
+				        $scope.resultado.NoMaterias = NoMaterias;
+
+				        console.log(JSON.stringify($scope.resultado));
+				    });	
+			    });
+		    });
+	    });
+	});
+</script>

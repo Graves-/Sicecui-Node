@@ -383,6 +383,43 @@ app.get('/getPagos', function (req, res) {
 	});
 });
 
+app.get('/getCountAlumnos', function (req, res) {
+
+	connection.query("select COUNT(PersonaID) as Alumnos FROM Persona where PerfilID = 1", function(err, rows, fields) {
+	  if (err) throw err;
+	  var NoAlumnos = rows[0].Alumnos;
+	  res.send('' + NoAlumnos);
+	  console.log(NoAlumnos);
+	});
+});
+
+app.get('/getCountMaestros', function (req, res) {
+	connection.query("select COUNT(PersonaID) as Maestros FROM Persona where PerfilID = 2", function(err, rows, fields) {
+	  if (err) throw err;
+	  var NoMaestros = rows[0].Maestros;
+	  res.send('' + NoMaestros);
+	  console.log(NoMaestros);
+	});
+});
+
+app.get('/getCountMaterias', function (req, res) {
+	connection.query("select count(MateriaID) as Materias from Materias", function(err, rows, fields) {
+	  if (err) throw err;
+	  var NoMaterias = rows[0].Materias;
+	  res.send('' + NoMaterias);
+	  console.log(NoMaterias);
+	});
+});
+
+app.get('/getCountCarreras', function (req, res) {
+	connection.query("select count(CarreraID) as Carreras from Carrera", function(err, rows, fields) {
+	  if (err) throw err;
+	  var NoCarreras = rows[0].Carreras;
+	  res.send('' + NoCarreras);
+	  console.log(NoCarreras);
+	});
+});
+
 //RUTA PARA CUANDO NO EXISTE LA PAGINA SOLICITADA
 app.use("*",function(req,res){
   res.render('404');
