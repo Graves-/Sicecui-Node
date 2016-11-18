@@ -152,19 +152,20 @@ app.post('/insertAlumno',function(req,res){
 	console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL' 
 });
 
-app.post('/insertPago', function(req,res) {
+app.get('/insertPago', function(req,res) {
 	var fecha = new Date();
 
-	if (req.body.PersonaID != '') {
+	if (req.query.PersonaID !== undefined) {
 		var pago = {
-			PersonaID: req.body.PersonaID,
-			CantidadNum: req.body.CantidadNum,
-			CantidadLetra: req.body.CantidadLetra,
-			Concepto: req.body.Concepto,
+			PersonaID: req.query.PersonaID,
+			CantidadNum: req.query.CantidadNum,
+			CantidadLetra: req.query.CantidadLetra,
+			Concepto: req.query.Concepto,
 			AnoID: fecha.getFullYear(),
 			MesID: fecha.getMonth()+1,
 			Dia: fecha.getDay()
 		};
+		console.log(pago);
 		var query = connection.query('INSERT INTO Pagos SET ?', pago, function(err, result) {
 			if (err){
 				console.log(err);

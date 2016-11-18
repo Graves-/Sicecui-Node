@@ -17,7 +17,7 @@
 
 	<!-- SECCION PARA REGISTRAR PAGO -->	
 	<div class="row" style="padding-top: 50px;" ng-show="optionSelected == 1">
-		<form class="form-horizontal" action="/insertPago" method="POST">
+		<form class="form-horizontal" action="" method="POST">
 			<fieldset>
 			    <legend>Recibo de Pago</legend>
 			    <div class="form-group">
@@ -104,9 +104,10 @@
 
 <script type="text/javascript">
 	var app = angular.module('sicecui', []);
-	app.config(function($interpolateProvider) {
+	app.config(function($interpolateProvider,$httpProvider) {
 	  $interpolateProvider.startSymbol('{[{');
 	  $interpolateProvider.endSymbol('}]}');
+	  $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
 	});
 	//insert into Pagos(PersonaID,CantidadNum,CantidadLetra,Concepto,AñoID,MesID) Values(2,1500,'MIL QUINIENTOS PESOS','PAGO MENSUAL NOVIEMBRE 2016',2016,11);
 	app.controller('controller-pagos',function($scope,$http) {
@@ -136,7 +137,28 @@
 			    		swal("Error!", "No se pudo obtener la clave del alumno.", "error");
 			    	}else{
 			    		$scope.ClaveAlumno = response.data[0].PersonaID;
-			    		swal("Registrar", "Se obtuvo la clave del alumno, por favor vuelve a dar clic en 'Registrar'.");
+			    		//swal("Registrar", "Se obtuvo la clave del alumno, por favor vuelve a dar clic en 'Registrar'.");
+			    		var data = {
+		    				PersonaID : response.data[0].PersonaID,
+		    				CarreraID : document.getElementById('CarreraID').value,
+		    				CantidadNum : document.getElementById('CantidadNum').value,
+		    				CantidadLetra : document.getElementById('CantidadLetra').value,
+		    				Concepto : document.getElementById('Concepto').value,
+		    				AnoID : $scope.fecha.getFullYear(),
+		    				MesID : $scope.fecha.getMonth()+1,
+		    				Dia : $scope.fecha.getDay()
+			    		};
+			    		$http.get('/insertPago', {params: data})
+			    		.then(function(response) {
+					        swal("Registrado!", "El pago del alumno fue registrado con éxito.", "success")
+					        document.getElementById('PersonaID').value = "";
+					        document.getElementById('CantidadNum').value = "";
+					        document.getElementById('CantidadLetra').value = "";
+					        document.getElementById('Concepto').value = "";
+					        document.getElementById('Nombre').value = "";
+					        document.getElementById('ApellidoMaterno').value = "";
+					        document.getElementById('ApellidoPeterno').value = "";
+					    });
 			    	}
 			    }, function myError(response) {
 			        swal("Error!", "No se pudo obtener la clave del alumno.", "error");
